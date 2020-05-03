@@ -28,22 +28,22 @@ void Tick() {
 	case Begin:
 		if (tempA == 0x01)
 		{
-			state = Increase; 
+			state = Increase;
 			break;
 		}
 		else if (tempA == 0x02)
 		{
-			state = Decrease; 
+			state = Decrease;
 			break;
 		}
 		else if (tempA == 0x03)
 		{
-			state = Reset; 
+			state = Reset;
 			break;
 		}
 		else
 		{
-			state = Begin; 
+			state = Begin;
 			break;
 		}
 	case Increase:
@@ -55,17 +55,17 @@ void Tick() {
 	case Wait:
 		if ((tempA == 0x01) || (tempA == 0x02))
 		{
-			state = Wait; 
+			state = Wait;
 			break;
 		}
 		else if (tempA == 0x03)
 		{
-			state = Reset; 
+			state = Reset;
 			break;
 		}
 		else
 		{
-			state = Begin; 
+			state = Begin;
 			break;
 		}
 	case Reset:
@@ -89,12 +89,12 @@ void Tick() {
 	{
 		if (tempC >= 0x09)
 		{
-			tempC = 0x09; 
+			tempC = 0x09;
 			break;
 		}
 		else
 		{
-			tempC = tempC + 0x01; 
+			tempC = tempC + 0x01;
 			break;
 		}
 	}
@@ -102,12 +102,12 @@ void Tick() {
 	{
 		if (tempC <= 0x00)
 		{
-			tempC = 0x00; 
+			tempC = 0x00;
 			break;
 		}
 		else
 		{
-			tempC = tempC - 0x01; 
+			tempC = tempC - 0x01;
 			break;
 		}
 	}
@@ -115,7 +115,7 @@ void Tick() {
 		break;
 	case Reset:
 	{
-		tempC = 0x00; 
+		tempC = 0x00;
 		break;
 	}
 	default:
@@ -129,6 +129,8 @@ int main(void)
 {
 	state = Start;
 	tempC = 0x00;
+	DDRA = 0x00;	PORTA = 0xFF;
+	DDRC = 0xFF;	PORTC = 0x00;
 	while (1)
 	{
 		Tick();

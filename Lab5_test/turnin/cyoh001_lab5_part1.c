@@ -21,7 +21,7 @@ int main(void) {
 
 	while (1) {
 
-		tempA = PINA;
+		tempA = ~PINA & 0x0F;
 
 		if (tempA == 0x00)
 		{
@@ -53,7 +53,6 @@ int main(void) {
 		}
 
 		PORTC = tempC;
-		tempC = 0x00;
 	}
 	return 0;
 }

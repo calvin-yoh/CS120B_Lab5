@@ -53,7 +53,6 @@ int main(void) {
 			}
 
 			PORTC = tempC;
-			tempC = 0x00;
 		}
 		return 0;
 	}

@@ -13,7 +13,6 @@
 #endif
 
 int main(void) {
-	int main(void) {
 		DDRA = 0x00; PORTA = 0xFF;
 		DDRC = 0xFF; PORTC = 0x00;
 		unsigned char tempA = 0x00;
@@ -56,4 +55,3 @@ int main(void) {
 		}
 		return 0;
 	}
-}

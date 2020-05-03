@@ -128,9 +128,12 @@ void Tick() {
 int main(void)
 {
 	state = Start;
-	tempC = 0x00;
+	tempC = 0x07;
+
 	while (1)
 	{
+		PORTC = 0x01;
 		Tick();
 	}
+	return 0;
 }

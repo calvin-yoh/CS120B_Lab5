@@ -13,46 +13,128 @@
 #include "simAVRHeader.h"
 #endif	
 
-int main(void) {
-	DDRA = 0x00; PORTA = 0xFF;
-	DDRC = 0xFF; PORTC = 0x00;
-	unsigned char tempA = 0x00;
-	unsigned char tempC = 0x00;
+enum States { Start, Begin, Increase, Decrease, Wait, Reset }state;
+unsigned char tempC = 0x00;
+unsigned char tempA = 0x00;
 
-	while (1) {
-
-		tempA = ~PINA & 0x0F;
-
-		if (tempA == 0x00)
+void Tick() {
+	tempA = ~PINA;
+	switch (state) { //Transitions
+	case Start:
+	{
+		state = Begin;
+		break;
+	}
+	case Begin:
+		if (tempA == 0x01)
 		{
-			tempC = 0x40;
+			state = Increase;
+			break;
 		}
-		else if (tempA == 0x01 || tempA == 0x02)
+		else if (tempA == 0x02)
 		{
-			tempC = 0x60;
+			state = Decrease;
+			break;
 		}
-		else if (tempA == 0x03 || tempA == 0x04)
+		else if (tempA == 0x03)
 		{
-			tempC = 0x70;
-		}
-		else if (tempA == 0x05 || tempA == 0x06)
-		{
-			tempC = 0x38;
-		}
-		else if (tempA == 0x07 || tempA == 0x08 || tempA == 0x09)
-		{
-			tempC = 0x3C;
-		}
-		else if (tempA == 0x0A || tempA == 0x0B || tempA == 0x0C)
-		{
-			tempC = 0x3E;
+			state = Reset;
+			break;
 		}
 		else
 		{
-			tempC = 0x3F;
+			state = Begin;
+			break;
 		}
+	case Increase:
+		state = Wait;
+		break;
+	case Decrease:
+		state = Wait;
+		break;
+	case Wait:
+		if ((tempA == 0x01) || (tempA == 0x02))
+		{
+			state = Wait;
+			break;
+		}
+		else if (tempA == 0x03)
+		{
+			state = Reset;
+			break;
+		}
+		else
+		{
+			state = Begin;
+			break;
+		}
+	case Reset:
+		if ((tempA == 0x01) || (tempA == 0x02))
+		{
+			state = Reset; break;
+		}
+		else
+		{
+			state = Begin; break;
+		}
+	default:
+		state = Start;
+		break;
+	}
+
+	switch (state) { //State actions
+	case Begin:
+		break;
+	case Increase:
+	{
+		if (tempC >= 0x09)
+		{
+			tempC = 0x09;
+			break;
+		}
+		else
+		{
+			tempC = tempC + 0x01;
+			break;
+		}
+	}
+	case Decrease:
+	{
+		if (tempC <= 0x00)
+		{
+			tempC = 0x00;
+			break;
+		}
+		else
+		{
+			tempC = tempC - 0x01;
+			break;
+		}
+	}
+	case Wait:
+		break;
+	case Reset:
+	{
+		tempC = 0x00;
+		break;
+	}
+	default:
+		break;
+	}
 
 	PORTC = tempC;
+
+}
+
+int main(void)
+{
+	state = Start;
+        DDRA = 0x00; PORTA = 0xFF;
+	DDRC = 0xFF; PORTC = 0x00;
+	tempC = 0x00;
+	while (1)
+	{
+		Tick();
 	}
 
 	return 0;

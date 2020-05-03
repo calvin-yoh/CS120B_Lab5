@@ -133,4 +133,5 @@ int main(void)
 	{
 		Tick();
 	}
+	return 0;
 }

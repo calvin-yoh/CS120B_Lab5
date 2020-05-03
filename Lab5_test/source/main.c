@@ -123,11 +123,14 @@ void Tick() {
 	}
 
 	PORTC = tempC;
+
 }
 
 int main(void)
 {
 	state = Start;
+        DDRA = 0x00; PORTA = 0xFF;
+	DDRC = 0xFF; PORTC = 0x00;
 	tempC = 0x00;
 	DDRA = 0x00;	PORTA = 0xFF;
 	DDRC = 0xFF;	PORTC = 0x00;
@@ -135,5 +138,6 @@ int main(void)
 	{
 		Tick();
 	}
+
 	return 0;
 }

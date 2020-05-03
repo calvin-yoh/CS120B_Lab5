@@ -13,7 +13,7 @@
 #include "simAVRHeader.h"
 #endif	
 
-enum States { Start, First, Second, Third, Fourth, Fifth }state;
+enum States { Start, First, Second, Third, Fourth, Fifth, WaitOne, WaitTwo, WaitThree, WaitFour, WaitFive }state;
 unsigned char tempB = 0x00;
 unsigned char tempA = 0x00;
 
@@ -26,11 +26,33 @@ void Tick() {
 	case First:
 		if (tempA == 0x01)
 		{
+			state = WaitOne;
+			break;
+		}
+	case WaitOne:
+		if (tempA == 0x01)
+		{
+			state = WaitOne;
+			break;
+		}
+		else
+		{
 			state = Second;
 			break;
 		}
 	case Second:
 		if (tempA == 0x01)
+		{
+			state = WaitTwo;
+			break;
+		}
+	case WaitTwo:
+		if (tempA == 0x01)
+		{
+			state = WaitTwo;
+			break;
+		}
+		else
 		{
 			state = Third;
 			break;
@@ -38,17 +60,50 @@ void Tick() {
 	case Third:
 		if (tempA == 0x01)
 		{
+			state = WaitThree;
+			break;
+		}
+	case WaitThree:
+		if (tempA == 0x01)
+		{
+			state = WaitThree;
+			break;
+		}
+		else
+		{
 			state = Fourth;
 			break;
 		}
 	case Fourth:
 		if (tempA == 0x01)
 		{
+			state = WaitFour;
+			break;
+		}
+	case WaitFour:
+		if (tempA == 0x01)
+		{
+			state = WaitFour;
+			break;
+		}
+		else
+		{
 			state = Fifth;
 			break;
 		}
 	case Fifth:
 		if (tempA == 0x01)
+		{
+			state = WaitFive;
+			break;
+		}
+	case WaitFive:
+		if (tempA == 0x01)
+		{
+			state = WaitFive;
+			break;
+		}
+		else
 		{
 			state = First;
 			break;
@@ -81,7 +136,6 @@ void Tick() {
 		break;
 	}
 	default:
-		tempB = 0x00;
 		break;
 	}
 
